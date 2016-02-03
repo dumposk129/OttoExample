@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
@@ -36,21 +35,25 @@ public class Fragment1 extends Fragment {
 
     @OnClick(R.id.btnSendMessage)
     public void btnSendMessageClicked() {
+        // Publish Event
         BusStation.getBus().post(new Message(txtMessage.getText().toString()));
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // Register with bus
         BusStation.getBus().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        // Unregister with bus
         BusStation.getBus().unregister(this);
     }
 
+    // Listener Event
     @Subscribe
     public void recievedMesage(Message message) {
         tvTest.setText(message.getMsg());
